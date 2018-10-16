@@ -5,6 +5,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.tfg2018.ws.rest.fchain.FChainConst;
 import com.tfg2018.ws.rest.fchain.FChainInterface;
 
 public class ServiceFChain {

@@ -16,7 +16,7 @@ public class CommandTranslator {
 	
 	public CommandTranslator() {}
 	
-	protected StringEntity translateCommandToJson(String command, Object... parameters) throws Exception {
+	public StringEntity commandToJson(String command, Object... parameters) throws Exception {
 		// Generate Mapping of calling arguments
 		Map<String, Object> entityValues = getJsonMap(command, parameters);
 		// Generate the entity and initialize request
