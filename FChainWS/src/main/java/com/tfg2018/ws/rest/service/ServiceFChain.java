@@ -5,7 +5,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.tfg2018.ws.rest.fchain.FChainQueryMaker;
+import com.tfg2018.ws.rest.fchain.FChainInterface;
 
 public class ServiceFChain {
 	@Path("/JavaRevolutions")
@@ -16,7 +16,7 @@ public class ServiceFChain {
 		@Produces({MediaType.APPLICATION_JSON})
 		public void Connect() {
 			FChainConst fChainConstst = new FChainConst();
-			FChainQueryMaker fChain = new FChainQueryMaker(FChainConst.MULTICHAIN_SERVER_IP,FChainConst.MULTICHAIN_SERVER_PORT, FChainConst.MULTICHAIN_SERVER_LOGIN, FChainConst.MULTICHAIN_SERVER_PWD);
+			FChainInterface fChain = new FChainInterface(FChainConst.MULTICHAIN_SERVER_IP,FChainConst.MULTICHAIN_SERVER_PORT, FChainConst.MULTICHAIN_SERVER_LOGIN, FChainConst.MULTICHAIN_SERVER_PWD);
 		}
 	}
 }
