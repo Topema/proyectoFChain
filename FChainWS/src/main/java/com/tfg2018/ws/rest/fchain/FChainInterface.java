@@ -2,7 +2,7 @@ package com.tfg2018.ws.rest.fchain;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
+import com.tfg2018.ws.rest.object.FChainResponse;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
