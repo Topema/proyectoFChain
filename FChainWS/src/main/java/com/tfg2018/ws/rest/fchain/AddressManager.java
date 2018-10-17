@@ -13,27 +13,33 @@ public class AddressManager {
 	private String multisignatureAddress;
 	private FChainInterface fChainQuerier = new FChainInterface(FChainConst.MULTICHAIN_SERVER_IP,FChainConst.MULTICHAIN_SERVER_PORT, FChainConst.MULTICHAIN_SERVER_LOGIN, FChainConst.MULTICHAIN_SERVER_PWD);
 	
-	public void generatemultisigAddress() throws Exception{
+	public void generateMultisigAddress() throws Exception{
 		this.walletAddress = getNewAddress();
 		this.nonWalletKeys = getNewKeyPair();
 		this.multisignatureAddress = addMultisigAddress().toString();
 	}
 
 	
-	public void generateNewMultisigAddress(String privKey) throws Exception {
-		this.multisignatureAddress = addMultisigAddress().toString();
+	public void generateNewMultisigAddress(String pubKey) throws Exception {
+		this.multisignatureAddress = addMultisigAddress(pubKey).toString();
 	}
 	
-	private Object addMultisigAddress(String... privKey) throws Exception{
-		String secondKey;
-		if(privKey.length>0) {
-			secondKey = validateAddress(privKey[0]);
-			this.walletAddress = getNewAddress();
-		}else {
-			secondKey = this.nonWalletKeys.getPrivkey();
-		}
+	private Object addMultisigAddress() throws Exception{
 		try {
-			String[] keys = {this.walletAddress,  secondKey};
+			String[] keys = {this.walletAddress,  this.nonWalletKeys.getPubkey()};
+			return this.fChainQuerier.executeRequest(CommandTranslator.commandToJson("addmultisigaddress", 1,keys));
+		}catch(Exception e){
+			throw new Exception("Fallo al generar el par de claves");
+		}
+	}
+	
+	
+	private Object addMultisigAddress(String pubKey) throws Exception{ 
+			validateAddress(pubKey);
+			this.walletAddress = getNewAddress();
+			System.out.println(this.walletAddress);
+		try {
+			String[] keys = {this.walletAddress,  pubKey};
 			return this.fChainQuerier.executeRequest(CommandTranslator.commandToJson("addmultisigaddress", 1,keys));
 		}catch(Exception e){
 			throw new Exception("Fallo al generar el par de claves");
@@ -58,12 +64,10 @@ public class AddressManager {
 		}
 	}
 	
-	private String validateAddress(String key) throws Exception{
+	private void validateAddress(String key) throws Exception{
 		Object validator = CommandTranslator.formatJson(this.fChainQuerier.executeRequest(CommandTranslator.commandToJson("validateaddress", key)));
 		AddressValidator addressValidator = GsontoObjectTranslator.isKeyValid(validator);
-		if(addressValidator.getIsvalid()) {
-			return addressValidator.getAddress();
-		}else {
+		if(!addressValidator.getIsvalid()) {
 			throw new Exception("this address is not valid");
 		}
 	}
