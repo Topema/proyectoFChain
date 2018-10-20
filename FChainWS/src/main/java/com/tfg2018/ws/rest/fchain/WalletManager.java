@@ -6,7 +6,7 @@ import com.tfg2018.ws.rest.object.KeyPairs;
 import com.tfg2018.ws.rest.utils.CommandTranslator;
 import com.tfg2018.ws.rest.utils.GsontoObjectTranslator;
 
-public class AddressManager {
+public class WalletManager {
 	
 	private String walletAddress;
 	private KeyPairs nonWalletKeys;
@@ -18,10 +18,14 @@ public class AddressManager {
 		this.nonWalletKeys = getNewKeyPair();
 		this.multisignatureAddress = addMultisigAddress().toString();
 	}
+	
+	public KeyPairs getNonWalletKeys() {
+		return this.nonWalletKeys;
+	}
 
 	
-	public void generateNewMultisigAddress(String pubKey) throws Exception {
-		this.multisignatureAddress = addMultisigAddress(pubKey).toString();
+	public void generateNewMultisigAddress(String pubKey, String privKey) throws Exception {
+		this.multisignatureAddress = addMultisigAddress(pubKey, privKey).toString();
 	}
 	
 	private Object addMultisigAddress() throws Exception{
@@ -34,8 +38,8 @@ public class AddressManager {
 	}
 	
 	
-	private Object addMultisigAddress(String pubKey) throws Exception{ 
-			validateAddress(pubKey);
+	private Object addMultisigAddress(String pubKey, String privKey) throws Exception{ 
+			validateAddress(privKey);
 			this.walletAddress = getNewAddress();
 			System.out.println(this.walletAddress);
 		try {
@@ -46,7 +50,7 @@ public class AddressManager {
 		}
 	}
 	
-	private String getNewAddress() throws Exception{
+	public String getNewAddress() throws Exception{
 		try {
 			return this.fChainQuerier.executeRequest(CommandTranslator.commandToJson("getnewaddress")).toString();
 		}catch(Exception e) {
@@ -60,7 +64,7 @@ public class AddressManager {
 			keyPair = CommandTranslator.formatJson(this.fChainQuerier.executeRequest(CommandTranslator.commandToJson("createkeypairs")));
 			return GsontoObjectTranslator.getKeys(keyPair);
 		}catch(Exception e) {
-			throw new Exception("Error al generar la dirección multifirma");
+			throw new Exception("Error al generar el par de claves");
 		}
 	}
 	
