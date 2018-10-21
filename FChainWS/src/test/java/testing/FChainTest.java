@@ -72,7 +72,8 @@ public class FChainTest {
 			KeyPairs keyPairReceiver = walletManager.getNewKeyPair();
 			Token token = newToken();
 			tokenManager.generateToken(token,keyPairSender.getAddress());
-			transactionManager.sendAssetFrom(keyPairSender, keyPairReceiver.getAddress(), token);
+			String hexBlob = transactionManager.createAndSignRawTransaction(keyPairSender, keyPairReceiver.getAddress(), token);
+			transactionManager.sendConfirmedTransaction(hexBlob);
 			assert(true);
 		}catch(Exception e){
 			System.out.println(e);

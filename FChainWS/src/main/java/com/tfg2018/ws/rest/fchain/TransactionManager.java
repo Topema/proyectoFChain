@@ -17,7 +17,7 @@ public class TransactionManager {
 	private FChainInterface fChainQuerier = new FChainInterface(FChainConst.MULTICHAIN_SERVER_IP,
 			FChainConst.MULTICHAIN_SERVER_PORT, FChainConst.MULTICHAIN_SERVER_LOGIN, FChainConst.MULTICHAIN_SERVER_PWD);
 
-	public String sendAssetFrom(String hexBlob) throws Exception {
+	public String sendConfirmedTransaction(String hexBlob) throws Exception {
 		StringEntity request = CommandTranslator.commandToJson("sendrawtransaction", hexBlob);
 		try {
 			return this.fChainQuerier.executeRequest(request).toString();
