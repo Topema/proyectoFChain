@@ -15,6 +15,7 @@ import com.tfg2018.ws.rest.object.KeyPairs;
 import com.tfg2018.ws.rest.object.Token;
 import com.tfg2018.ws.rest.fchain.FchainConst;
 import com.tfg2018.ws.rest.fchain.FchainInterface;
+import com.tfg2018.ws.rest.fchain.FchainTracer;
 import com.tfg2018.ws.rest.fchain.TokenManager;
 import com.tfg2018.ws.rest.fchain.TransactionManager;
 import com.tfg2018.ws.rest.utils.CommandTranslator;
@@ -85,23 +86,33 @@ public class FChainTest {
 	public void tokentracing() {
 		TokenManager tokenManager = new TokenManager();
 		WalletManager walletManager = new WalletManager();
-		TransactionManager transactionManager = new TransactionManager();
 		try {
-			KeyPairs keyPairSender = walletManager.getNewKeyPair();
-			KeyPairs keyPairSender2 = walletManager.getNewKeyPair();
-			KeyPairs keyPairSender3 = walletManager.getNewKeyPair();
 			Token token = newToken();
-			tokenManager.generateToken(token,keyPairSender.getAddress());
-			String hexBlob1 = transactionManager.createAndSignRawTransaction(keyPairSender, keyPairSender2.getAddress(), token);
-			transactionManager.sendConfirmedTransaction(hexBlob1);
-			String hexBlob2 = transactionManager.createAndSignRawTransaction(keyPairSender2, keyPairSender3.getAddress(), token);
-			transactionManager.sendConfirmedTransaction(hexBlob2);
-			System.out.println(token.getName());
-			assert(true);
+			KeyPairs keyPairSender3 = walletManager.getNewKeyPair();
+			transactToken(token, keyPairSender3);
+			FchainTracer fchainTracer = new FchainTracer();
+			if(keyPairSender3.getAddress().equals(fchainTracer.getTokenOwner(token.getName()))) {
+				assert(true);
+			}else {
+				assert(false);
+			}
 		}catch(Exception e){
 			System.out.println(e);
 			assert(false);
 		}
+	}
+	
+	private void transactToken(Token token, KeyPairs keyPairSender3) throws Exception{
+		TokenManager tokenManager = new TokenManager();
+		WalletManager walletManager = new WalletManager();
+		TransactionManager transactionManager = new TransactionManager();
+		KeyPairs keyPairSender = walletManager.getNewKeyPair();
+		KeyPairs keyPairSender2 = walletManager.getNewKeyPair();
+		tokenManager.generateToken(token,keyPairSender.getAddress());
+		String hexBlob1 = transactionManager.createAndSignRawTransaction(keyPairSender, keyPairSender2.getAddress(), token);
+		transactionManager.sendConfirmedTransaction(hexBlob1);
+		String hexBlob2 = transactionManager.createAndSignRawTransaction(keyPairSender2, keyPairSender3.getAddress(), token);
+		transactionManager.sendConfirmedTransaction(hexBlob2);
 	}
 	
 	private String randomString() {
