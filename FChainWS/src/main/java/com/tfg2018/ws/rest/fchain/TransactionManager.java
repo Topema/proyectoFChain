@@ -17,8 +17,7 @@ public class TransactionManager {
 	private FChainInterface fChainQuerier = new FChainInterface(FChainConst.MULTICHAIN_SERVER_IP,
 			FChainConst.MULTICHAIN_SERVER_PORT, FChainConst.MULTICHAIN_SERVER_LOGIN, FChainConst.MULTICHAIN_SERVER_PWD);
 
-	public String sendAssetFrom(KeyPairs sender, String objective, Token token) throws Exception {
-		String hexBlob = createSignRequest(sender, token, objective);
+	public String sendAssetFrom(String hexBlob) throws Exception {
 		StringEntity request = CommandTranslator.commandToJson("sendrawtransaction", hexBlob);
 		try {
 			return this.fChainQuerier.executeRequest(request).toString();
@@ -27,14 +26,16 @@ public class TransactionManager {
 		}
 	}
 
-	private String createRawTransaction(String sender, Token token, String destination) throws Exception {
+	public String createAndSignRawTransaction(KeyPairs sender, String destination, Token token) throws Exception {
+		String hexBlob;
 		try {
 			Map<String, Object> mapParams = prepareMap(destination, token);
-			StringEntity request = CommandTranslator.commandToJson("createrawsendfrom", sender, mapParams);
-			return this.fChainQuerier.executeRequest(request).toString();
+			StringEntity request = CommandTranslator.commandToJson("createrawsendfrom", sender.getAddress(), mapParams);
+			hexBlob = this.fChainQuerier.executeRequest(request).toString();
 		} catch (Exception e) {
 			throw new Exception("error creating the transaction, the asset doesn't belong to the sender address");
 		}
+		return signRequest(sender, hexBlob);
 	}
 
 	private Map<String, Object> prepareMap(String destination, Token token) {
@@ -45,8 +46,7 @@ public class TransactionManager {
 		return mapParams;
 	}
 
-	private String createSignRequest(KeyPairs sender, Token token, String objective) throws Exception {
-		String hexBlob = createRawTransaction(sender.getAddress(), token, objective);
+	private String signRequest(KeyPairs sender, String hexBlob) throws Exception {
 		List<String> label = new ArrayList<String>();
 		List<String> privKey = new ArrayList<String>();
 		privKey.add(sender.getPrivkey());
