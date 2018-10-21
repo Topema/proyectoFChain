@@ -14,10 +14,12 @@ public class ServiceFChain {
 
 		@GET
 		@Path("/connect")
-		@Produces({MediaType.APPLICATION_JSON})
+		@Produces({ MediaType.APPLICATION_JSON })
 		public void Connect() {
 			FChainConst fChainConstst = new FChainConst();
-			FChainInterface fChain = new FChainInterface(FChainConst.MULTICHAIN_SERVER_IP,FChainConst.MULTICHAIN_SERVER_PORT, FChainConst.MULTICHAIN_SERVER_LOGIN, FChainConst.MULTICHAIN_SERVER_PWD);
+			FChainInterface fChain = new FChainInterface(FChainConst.MULTICHAIN_SERVER_IP,
+					FChainConst.MULTICHAIN_SERVER_PORT, FChainConst.MULTICHAIN_SERVER_LOGIN,
+					FChainConst.MULTICHAIN_SERVER_PWD);
 		}
 	}
 }

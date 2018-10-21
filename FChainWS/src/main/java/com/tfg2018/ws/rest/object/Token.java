@@ -17,11 +17,11 @@ public class Token {
 	private Boolean subscribed;
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-	public Token(String assetName, Double issueqty, Double units, int issueraw, Map<String, String> details) {
+	public Token(String assetName, Map<String, String> details) {
 		this.name = assetName;
-		this.issueqty = issueqty;
-		this.units = units;
-		this.issueraw = issueraw;
+		this.issueqty = 1.0;
+		this.units = 0.1;
+		this.issueraw = 0;
 		this.details = details;
 	}
 

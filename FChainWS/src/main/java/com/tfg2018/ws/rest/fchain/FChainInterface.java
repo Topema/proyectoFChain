@@ -23,25 +23,25 @@ import org.apache.http.util.EntityUtils;
 
 public class FChainInterface {
 
-    private CloseableHttpClient httpclient = null;
-    private HttpPost httppost = null;
-    private Object answer = null;
-    
-    public FChainInterface(String ip, String port,String login, String password) {
-    	connect(ip,port,login,password);
-    }
-    
-    protected void connect (String ip, String port, String login, String password) {
-    	httppost = new HttpPost("http://" + ip + ":" + port);
+	private CloseableHttpClient httpclient = null;
+	private HttpPost httppost = null;
+	private Object answer = null;
 
-        CredentialsProvider provider = new BasicCredentialsProvider();
-        UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(login, password);
-        provider.setCredentials(AuthScope.ANY, credentials);
+	public FChainInterface(String ip, String port, String login, String password) {
+		connect(ip, port, login, password);
+	}
 
-        httpclient = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
-    }
-    
-	public Object executeRequest(StringEntity rpcEntity) throws Exception{
+	protected void connect(String ip, String port, String login, String password) {
+		httppost = new HttpPost("http://" + ip + ":" + port);
+
+		CredentialsProvider provider = new BasicCredentialsProvider();
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(login, password);
+		provider.setCredentials(AuthScope.ANY, credentials);
+
+		httpclient = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
+	}
+
+	public Object executeRequest(StringEntity rpcEntity) throws Exception {
 		if (httpclient != null && httppost != null) {
 			httppost.setEntity(rpcEntity);
 		} else {
@@ -52,11 +52,11 @@ public class FChainInterface {
 
 		String answer = EntityUtils.toString(entity);
 		response.close();
-		
+
 		return translateResponse(answer);
 	}
-	
-	private Object translateResponse(String answer) throws Exception{
+
+	private Object translateResponse(String answer) throws Exception {
 
 		final Gson gson = new GsonBuilder().create();
 		final FChainResponse fChainresponse = gson.fromJson(answer, FChainResponse.class);
@@ -70,5 +70,5 @@ public class FChainInterface {
 		}
 
 	}
-    
+
 }

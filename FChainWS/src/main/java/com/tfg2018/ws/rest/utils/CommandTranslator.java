@@ -13,15 +13,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class CommandTranslator {
-	
-	public CommandTranslator() {}
-	
+
+	public CommandTranslator() {
+	}
+
 	public static StringEntity commandToJson(String command, Object... parameters) throws Exception {
 		Map<String, Object> mappedCommand = getJsonMap(command, parameters);
 		StringEntity jsonResult = new StringEntity(formatJson(mappedCommand));
 		return jsonResult;
 	}
-	
+
 	private static Map<String, Object> getJsonMap(String command, Object... parameters) {
 		Map<String, Object> mappedCommand = new HashMap<String, Object>();
 		mappedCommand.put("id", UUID.randomUUID().toString());
@@ -30,7 +31,7 @@ public class CommandTranslator {
 		mappedCommand.put("params", paramList);
 		return mappedCommand;
 	}
-	
+
 	public static String formatJson(Object value) {
 		final GsonBuilder builder = new GsonBuilder();
 		final Gson gson = builder.create();
