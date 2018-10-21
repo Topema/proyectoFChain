@@ -13,8 +13,8 @@ public class WalletManager {
 	private String walletAddress;
 	private KeyPairs nonWalletKeys;
 	private String multisignatureAddress;
-	private FChainInterface fChainQuerier = new FChainInterface(FChainConst.MULTICHAIN_SERVER_IP,
-			FChainConst.MULTICHAIN_SERVER_PORT, FChainConst.MULTICHAIN_SERVER_LOGIN, FChainConst.MULTICHAIN_SERVER_PWD);
+	private FchainInterface fChainQuerier = new FchainInterface(FchainConst.MULTICHAIN_SERVER_IP,
+			FchainConst.MULTICHAIN_SERVER_PORT, FchainConst.MULTICHAIN_SERVER_LOGIN, FchainConst.MULTICHAIN_SERVER_PWD);
 
 	public void generateMultisigAddress() throws Exception {
 		this.walletAddress = getNewAddress();

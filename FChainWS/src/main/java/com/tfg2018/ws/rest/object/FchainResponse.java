@@ -2,7 +2,7 @@ package com.tfg2018.ws.rest.object;
 
 import com.google.gson.internal.LinkedTreeMap;
 
-public class FChainResponse {
+public class FchainResponse {
 
 	Object result = null;
 	LinkedTreeMap<String, Object> error;

@@ -2,7 +2,7 @@ package com.tfg2018.ws.rest.fchain;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.tfg2018.ws.rest.object.FChainResponse;
+import com.tfg2018.ws.rest.object.FchainResponse;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -21,13 +21,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
-public class FChainInterface {
+public class FchainInterface {
 
 	private CloseableHttpClient httpclient = null;
 	private HttpPost httppost = null;
 	private Object answer = null;
 
-	public FChainInterface(String ip, String port, String login, String password) {
+	public FchainInterface(String ip, String port, String login, String password) {
 		connect(ip, port, login, password);
 	}
 
@@ -59,7 +59,7 @@ public class FChainInterface {
 	private Object translateResponse(String answer) throws Exception {
 
 		final Gson gson = new GsonBuilder().create();
-		final FChainResponse fChainresponse = gson.fromJson(answer, FChainResponse.class);
+		final FchainResponse fChainresponse = gson.fromJson(answer, FchainResponse.class);
 
 		if (fChainresponse != null && fChainresponse.getError() == null) {
 			return fChainresponse.getResult();

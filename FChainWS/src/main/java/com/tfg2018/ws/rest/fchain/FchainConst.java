@@ -1,6 +1,6 @@
 package com.tfg2018.ws.rest.fchain;
 
-public class FChainConst {
+public class FchainConst {
 	public static String MULTICHAIN_SERVER_IP = "localhost";
 	public static String MULTICHAIN_SERVER_PORT = "5772";
 	public static String MULTICHAIN_SERVER_LOGIN = "multichainrpc";

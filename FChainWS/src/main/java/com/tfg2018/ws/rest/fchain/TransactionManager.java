@@ -14,8 +14,8 @@ import com.tfg2018.ws.rest.utils.GsontoObjectTranslator;
 
 public class TransactionManager {
 
-	private FChainInterface fChainQuerier = new FChainInterface(FChainConst.MULTICHAIN_SERVER_IP,
-			FChainConst.MULTICHAIN_SERVER_PORT, FChainConst.MULTICHAIN_SERVER_LOGIN, FChainConst.MULTICHAIN_SERVER_PWD);
+	private FchainInterface fChainQuerier = new FchainInterface(FchainConst.MULTICHAIN_SERVER_IP,
+			FchainConst.MULTICHAIN_SERVER_PORT, FchainConst.MULTICHAIN_SERVER_LOGIN, FchainConst.MULTICHAIN_SERVER_PWD);
 
 	public String sendConfirmedTransaction(String hexBlob) throws Exception {
 		StringEntity request = CommandTranslator.commandToJson("sendrawtransaction", hexBlob);

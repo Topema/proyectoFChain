@@ -13,8 +13,8 @@ import org.junit.Test;
 import com.tfg2018.ws.rest.fchain.WalletManager;
 import com.tfg2018.ws.rest.object.KeyPairs;
 import com.tfg2018.ws.rest.object.Token;
-import com.tfg2018.ws.rest.fchain.FChainConst;
-import com.tfg2018.ws.rest.fchain.FChainInterface;
+import com.tfg2018.ws.rest.fchain.FchainConst;
+import com.tfg2018.ws.rest.fchain.FchainInterface;
 import com.tfg2018.ws.rest.fchain.TokenManager;
 import com.tfg2018.ws.rest.fchain.TransactionManager;
 import com.tfg2018.ws.rest.utils.CommandTranslator;
@@ -74,6 +74,29 @@ public class FChainTest {
 			tokenManager.generateToken(token,keyPairSender.getAddress());
 			String hexBlob = transactionManager.createAndSignRawTransaction(keyPairSender, keyPairReceiver.getAddress(), token);
 			transactionManager.sendConfirmedTransaction(hexBlob);
+			assert(true);
+		}catch(Exception e){
+			System.out.println(e);
+			assert(false);
+		}
+	}
+	
+	@Test
+	public void tokentracing() {
+		TokenManager tokenManager = new TokenManager();
+		WalletManager walletManager = new WalletManager();
+		TransactionManager transactionManager = new TransactionManager();
+		try {
+			KeyPairs keyPairSender = walletManager.getNewKeyPair();
+			KeyPairs keyPairSender2 = walletManager.getNewKeyPair();
+			KeyPairs keyPairSender3 = walletManager.getNewKeyPair();
+			Token token = newToken();
+			tokenManager.generateToken(token,keyPairSender.getAddress());
+			String hexBlob1 = transactionManager.createAndSignRawTransaction(keyPairSender, keyPairSender2.getAddress(), token);
+			transactionManager.sendConfirmedTransaction(hexBlob1);
+			String hexBlob2 = transactionManager.createAndSignRawTransaction(keyPairSender2, keyPairSender3.getAddress(), token);
+			transactionManager.sendConfirmedTransaction(hexBlob2);
+			System.out.println(token.getName());
 			assert(true);
 		}catch(Exception e){
 			System.out.println(e);
