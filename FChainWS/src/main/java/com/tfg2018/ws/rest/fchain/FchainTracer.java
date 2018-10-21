@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.http.entity.StringEntity;
 
+import com.tfg2018.ws.rest.object.AssetTransaction;
 import com.tfg2018.ws.rest.utils.CommandTranslator;
 import com.tfg2018.ws.rest.utils.GsontoObjectTranslator;
 
@@ -21,5 +22,11 @@ public class FchainTracer {
 		System.out.println(GsontoObjectTranslator.getOwner((ArrayList<Object>) object));
 		return result;
 	}
-
+	
+	public List<AssetTransaction> getTokenStackTrace(String tokenName) throws Exception {
+		StringEntity request = CommandTranslator.commandToJson("listassettransactions", tokenName);
+		Object object= this.fChainQuerier.executeRequest(request);
+		return GsontoObjectTranslator.getStackTrace((ArrayList<Object>) object);
+	}
+	
 }

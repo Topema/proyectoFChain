@@ -36,6 +36,17 @@ public class GsontoObjectTranslator {
 		return gson.fromJson(a, AddressValidator.class);
 	}
 	
+	public static List<AssetTransaction> getStackTrace(List<Object> assetTransactions) {
+		List<AssetTransaction> transactions = new ArrayList<AssetTransaction>();
+		int i =1;
+		if (assetTransactions != null) {
+			for (Object assetTransaction : assetTransactions) {
+				transactions.add(getTransaction(assetTransaction));
+			}
+		}
+		return transactions;
+	}
+	
 	public static String getOwner(List<Object> assetTransactions) {
 		List<AssetTransaction> transactions = new ArrayList<AssetTransaction>();
 		String result = "";
@@ -43,21 +54,28 @@ public class GsontoObjectTranslator {
 		if (assetTransactions != null) {
 			for (Object assetTransaction : assetTransactions) {
 				if(i==assetTransactions.size())
-					result = formatTransactions(assetTransaction);
+					result = formatTransactions(assetTransaction).getAddresses().keySet().toArray()[0].toString();
 				i++;
 			}
 		}
 		return result;
 	}
 	
-	private static String formatTransactions(Object assetTransaction) {
+	private static AssetTransaction formatTransactions(Object assetTransaction) {
 		String a = assetTransaction.toString();
 		Gson gson = new Gson();
 		AssetTransaction res = gson.fromJson(a, AssetTransaction.class);
 			if(res.getAddresses().size()==1) {
-				return "";
+				return null;
 			}
-		return res.getAddresses().keySet().toArray()[0].toString();
+		return res;
+	}
+	
+	private static AssetTransaction getTransaction(Object assetTransaction) {
+		String a = assetTransaction.toString();
+		Gson gson = new Gson();
+		AssetTransaction res = gson.fromJson(a, AssetTransaction.class);
+		return res;
 	}
 
 }

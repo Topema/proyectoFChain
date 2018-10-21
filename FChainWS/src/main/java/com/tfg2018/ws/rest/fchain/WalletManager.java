@@ -82,7 +82,7 @@ public class WalletManager {
 
 	private void importAddress(String address) throws Exception {
 		try {
-			StringEntity request = CommandTranslator.commandToJson("importaddress", address, "", false);
+			StringEntity request = CommandTranslator.commandToJson("importaddress", address, "", true);
 			//System.out.println("address : " + address);
 			this.fChainQuerier.executeRequest(request);
 		} catch (Exception e) {
