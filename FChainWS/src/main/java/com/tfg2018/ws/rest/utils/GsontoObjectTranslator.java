@@ -31,7 +31,7 @@ public class GsontoObjectTranslator {
 	}
 
 	public static AddressValidator isKeyValid(Object validator) {
-		String a = validator.toString().substring(1, validator.toString().length() - 1);
+		String a = validator.toString();
 		Gson gson = new Gson();
 		return gson.fromJson(a, AddressValidator.class);
 	}

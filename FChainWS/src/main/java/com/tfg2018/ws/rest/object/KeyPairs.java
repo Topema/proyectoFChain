@@ -8,7 +8,7 @@ public class KeyPairs {
 	private String pubkey;
 	private String privkey;
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
+	
 	public String getAddress() {
 		return address;
 	}

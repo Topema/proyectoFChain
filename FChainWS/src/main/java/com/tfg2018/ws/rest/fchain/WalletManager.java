@@ -71,19 +71,19 @@ public class WalletManager {
 		}
 	}
 
-	private void validateAddress(String key) throws Exception {
+	public String validateAddress(String key) throws Exception {
 		StringEntity request = CommandTranslator.commandToJson("validateaddress", key);
 		Object validator = CommandTranslator.formatJson(this.fChainQuerier.executeRequest(request));
 		AddressValidator addressValidator = GsontoObjectTranslator.isKeyValid(validator);
 		if (!addressValidator.getIsvalid()) {
 			throw new Exception("this address is not valid");
 		}
+		return addressValidator.getAddress();
 	}
 
 	private void importAddress(String address) throws Exception {
 		try {
 			StringEntity request = CommandTranslator.commandToJson("importaddress", address, "", true);
-			//System.out.println("address : " + address);
 			this.fChainQuerier.executeRequest(request);
 		} catch (Exception e) {
 			throw new Exception("Address importation error");

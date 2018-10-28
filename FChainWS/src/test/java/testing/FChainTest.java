@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
@@ -83,6 +84,22 @@ public class FChainTest {
 	}
 	
 	@Test
+	public void validateAddress() {
+		WalletManager walletManager = new WalletManager();
+		KeyPairs keyPair;
+		try {
+			keyPair = walletManager.getNewKeyPair();
+			walletManager.validateAddress(keyPair.getPrivkey());
+			assert(true);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println(e);
+			assert(false);
+		}
+
+	}
+	
+	@Test
 	public void tokentracing() {
 		TokenManager tokenManager = new TokenManager();
 		WalletManager walletManager = new WalletManager();
@@ -91,6 +108,9 @@ public class FChainTest {
 			KeyPairs keyPairSender3 = walletManager.getNewKeyPair();
 			transactToken(token, keyPairSender3);
 			FchainTracer fchainTracer = new FchainTracer();
+			System.out.println(keyPairSender3.getAddress());
+			System.out.println(fchainTracer.getTokenOwner(token.getName()));
+			TimeUnit.SECONDS.sleep(2);
 			if(keyPairSender3.getAddress().equals(fchainTracer.getTokenOwner(token.getName()))) {
 				assert(true);
 			}else {

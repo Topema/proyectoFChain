@@ -1,5 +1,6 @@
 package com.tfg2018.ws.rest.utils;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -19,8 +20,15 @@ public class CommandTranslator {
 
 	public static StringEntity commandToJson(String command, Object... parameters) throws Exception {
 		Map<String, Object> mappedCommand = getJsonMap(command, parameters);
-		StringEntity jsonResult = new StringEntity(formatJson(mappedCommand));
-		return jsonResult;
+		StringEntity jsonResult;
+		try {
+			jsonResult = new StringEntity(formatJson(mappedCommand));
+			return jsonResult;
+		} catch (UnsupportedEncodingException e) {
+			System.out.println("Error traduciendo elcomando a json");
+			throw new Exception(e);
+		}
+
 	}
 
 	private static Map<String, Object> getJsonMap(String command, Object... parameters) {

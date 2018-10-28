@@ -19,7 +19,6 @@ public class FchainTracer {
 		String result;
 		Object object= this.fChainQuerier.executeRequest(request);
 		result = GsontoObjectTranslator.getOwner((ArrayList<Object>) object);
-		System.out.println(GsontoObjectTranslator.getOwner((ArrayList<Object>) object));
 		return result;
 	}
 	
