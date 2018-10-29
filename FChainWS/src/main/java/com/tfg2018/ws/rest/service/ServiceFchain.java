@@ -11,8 +11,10 @@ import javax.ws.rs.core.MediaType;
 
 import com.tfg2018.ws.rest.ConsumedObjects.CheckToken;
 import com.tfg2018.ws.rest.ConsumedObjects.CreateTokenStructure;
+import com.tfg2018.ws.rest.ConsumedObjects.SendTokenCreator;
 import com.tfg2018.ws.rest.fchain.FchainTracer;
 import com.tfg2018.ws.rest.fchain.TokenManager;
+import com.tfg2018.ws.rest.fchain.TransactionManager;
 import com.tfg2018.ws.rest.fchain.WalletManager;
 import com.tfg2018.ws.rest.object.AssetTransaction;
 import com.tfg2018.ws.rest.object.KeyPairs;
@@ -25,6 +27,7 @@ public class ServiceFchain {
 	private WalletManager walletManager = new WalletManager();
 	private TokenManager tokenManager = new TokenManager();
 	private FchainTracer fchainTracer = new FchainTracer();
+	private TransactionManager transactionManager = new TransactionManager();
 	
 		@GET
 		@Path("/createKeyPair")
@@ -79,6 +82,16 @@ public class ServiceFchain {
 		@Produces({ MediaType.APPLICATION_JSON })
 		public List<AssetTransaction> getTokenStackTrace(CheckToken token) throws Exception {
 			List<AssetTransaction> response = fchainTracer.getTokenStackTrace(token.getName());
+			return response;
+		}
+		
+		@POST
+		@Path("/createInstantTransaction")
+		@Consumes({ MediaType.APPLICATION_JSON })
+		@Produces({ MediaType.APPLICATION_JSON })
+		public ResponseMessage sendToken(SendTokenCreator transact) throws Exception {
+			String hexBlob = transactionManager.createAndSignRawTransaction(transact.getAddressSender(), transact.getPrivKey(), transact.getAddressReceiver(), transact.getTokenName());
+			ResponseMessage response = new ResponseMessage(transactionManager.sendConfirmedTransaction(hexBlob));
 			return response;
 		}
 }

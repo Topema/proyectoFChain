@@ -75,7 +75,7 @@ public class FChainTest {
 			KeyPairs keyPairReceiver = walletManager.getNewKeyPair();
 			Token token = newToken();
 			tokenManager.generateToken(token,keyPairSender.getAddress());
-			String hexBlob = transactionManager.createAndSignRawTransaction(keyPairSender, keyPairReceiver.getAddress(), token);
+			String hexBlob = transactionManager.createAndSignRawTransaction(keyPairSender.getAddress(),keyPairSender.getPrivkey(), keyPairReceiver.getAddress(), token.getName());
 			transactionManager.sendConfirmedTransaction(hexBlob);
 			assert(true);
 		}catch(Exception e){
@@ -160,9 +160,9 @@ public class FChainTest {
 		KeyPairs keyPairSender = walletManager.getNewKeyPair();
 		KeyPairs keyPairSender2 = walletManager.getNewKeyPair();
 		tokenManager.generateToken(token,keyPairSender.getAddress());
-		String hexBlob1 = transactionManager.createAndSignRawTransaction(keyPairSender, keyPairSender2.getAddress(), token);
+		String hexBlob1 = transactionManager.createAndSignRawTransaction(keyPairSender.getAddress(), keyPairSender.getPrivkey(), keyPairSender2.getAddress(), token.getName());
 		transactionManager.sendConfirmedTransaction(hexBlob1);
-		String hexBlob2 = transactionManager.createAndSignRawTransaction(keyPairSender2, keyPairSender3.getAddress(), token);
+		String hexBlob2 = transactionManager.createAndSignRawTransaction(keyPairSender2.getAddress(), keyPairSender2.getPrivkey(), keyPairSender3.getAddress(), token.getName());
 		transactionManager.sendConfirmedTransaction(hexBlob2);
 	}
 	

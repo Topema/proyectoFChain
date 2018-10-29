@@ -26,30 +26,30 @@ public class TransactionManager {
 		}
 	}
 
-	public String createAndSignRawTransaction(KeyPairs sender, String destination, Token token) throws Exception {
+	public String createAndSignRawTransaction(String senderAddress, String senderPrivKey, String destination, String tokenName) throws Exception {
 		String hexBlob;
 		try {
-			Map<String, Object> mapParams = prepareMap(destination, token);
-			StringEntity request = CommandTranslator.commandToJson("createrawsendfrom", sender.getAddress(), mapParams);
+			Map<String, Object> mapParams = prepareMap(destination, tokenName);
+			StringEntity request = CommandTranslator.commandToJson("createrawsendfrom",senderAddress, mapParams);
 			hexBlob = this.fChainQuerier.executeRequest(request).toString();
 		} catch (Exception e) {
 			throw new Exception("error creating the transaction, the asset doesn't belong to the sender address");
 		}
-		return signRequest(sender, hexBlob);
+		return signRequest(senderPrivKey, hexBlob);
 	}
 
-	private Map<String, Object> prepareMap(String destination, Token token) {
+	private Map<String, Object> prepareMap(String destination, String tokenName) {
 		Map<String, Object> mapParams = new HashMap<String, Object>();
 		Map<String, Double> filledAsset = new HashMap<String, Double>();
-		filledAsset.put(token.getName(), 1.0);
+		filledAsset.put(tokenName, 1.0);
 		mapParams.put(destination, filledAsset);
 		return mapParams;
 	}
 
-	private String signRequest(KeyPairs sender, String hexBlob) throws Exception {
+	private String signRequest(String sender, String hexBlob) throws Exception {
 		List<String> label = new ArrayList<String>();
 		List<String> privKey = new ArrayList<String>();
-		privKey.add(sender.getPrivkey());
+		privKey.add(sender);
 
 		StringEntity request = CommandTranslator.commandToJson("signrawtransaction", hexBlob, label, privKey);
 		try {
