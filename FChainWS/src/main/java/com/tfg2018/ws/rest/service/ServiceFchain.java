@@ -1,5 +1,7 @@
 package com.tfg2018.ws.rest.service;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,6 +14,7 @@ import com.tfg2018.ws.rest.ConsumedObjects.CreateTokenStructure;
 import com.tfg2018.ws.rest.fchain.FchainTracer;
 import com.tfg2018.ws.rest.fchain.TokenManager;
 import com.tfg2018.ws.rest.fchain.WalletManager;
+import com.tfg2018.ws.rest.object.AssetTransaction;
 import com.tfg2018.ws.rest.object.KeyPairs;
 import com.tfg2018.ws.rest.object.ResponseMessage;
 import com.tfg2018.ws.rest.object.Token;
@@ -67,6 +70,15 @@ public class ServiceFchain {
 		@Produces({ MediaType.APPLICATION_JSON })
 		public ResponseMessage getTokenOwner(CheckToken token) throws Exception {
 			ResponseMessage response = new ResponseMessage(fchainTracer.getTokenOwner(token.getName()));
+			return response;
+		}
+		
+		@POST
+		@Path("/getTokenStackTrace")
+		@Consumes({ MediaType.APPLICATION_JSON })
+		@Produces({ MediaType.APPLICATION_JSON })
+		public List<AssetTransaction> getTokenStackTrace(CheckToken token) throws Exception {
+			List<AssetTransaction> response = fchainTracer.getTokenStackTrace(token.getName());
 			return response;
 		}
 }
