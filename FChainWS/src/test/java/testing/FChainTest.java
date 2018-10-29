@@ -14,7 +14,7 @@ import org.junit.Test;
 import com.tfg2018.ws.rest.fchain.WalletManager;
 import com.tfg2018.ws.rest.object.KeyPairs;
 import com.tfg2018.ws.rest.object.Token;
-import com.tfg2018.ws.rest.ConsumedObjects.CheckToken;
+import com.tfg2018.ws.rest.ConsumedObjects.OutsideMessage;
 import com.tfg2018.ws.rest.fchain.FchainConst;
 import com.tfg2018.ws.rest.fchain.FchainInterface;
 import com.tfg2018.ws.rest.fchain.FchainTracer;

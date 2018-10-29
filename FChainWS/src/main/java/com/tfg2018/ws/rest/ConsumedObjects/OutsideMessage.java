@@ -3,11 +3,11 @@ package com.tfg2018.ws.rest.ConsumedObjects;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CheckToken {
+public class OutsideMessage {
 	
-	private String name;
+	private String message;
 
 	public String getName() {
-		return name;
+		return message;
 	}
 }

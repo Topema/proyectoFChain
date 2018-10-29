@@ -9,7 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.tfg2018.ws.rest.ConsumedObjects.CheckToken;
+import com.tfg2018.ws.rest.ConsumedObjects.OutsideMessage;
 import com.tfg2018.ws.rest.ConsumedObjects.CreateTokenStructure;
 import com.tfg2018.ws.rest.ConsumedObjects.SendTokenCreator;
 import com.tfg2018.ws.rest.fchain.FchainConst;
@@ -53,7 +53,7 @@ public class ServiceFchain {
 		@Path("/getToken")
 		@Consumes({ MediaType.APPLICATION_JSON })
 		@Produces({ MediaType.APPLICATION_JSON })
-		public Token getTokenInfo(CheckToken token) throws Exception {
+		public Token getTokenInfo(OutsideMessage token) throws Exception {
 			Token response = tokenManager.getToken(token.getName());
 			return response;
 		}
@@ -72,7 +72,7 @@ public class ServiceFchain {
 		@Path("/getTokenOwner")
 		@Consumes({ MediaType.APPLICATION_JSON })
 		@Produces({ MediaType.APPLICATION_JSON })
-		public ResponseMessage getTokenOwner(CheckToken token) throws Exception {
+		public ResponseMessage getTokenOwner(OutsideMessage token) throws Exception {
 			ResponseMessage response = new ResponseMessage(fchainTracer.getTokenOwner(token.getName()));
 			return response;
 		}
@@ -81,7 +81,7 @@ public class ServiceFchain {
 		@Path("/getTokenStackTrace")
 		@Consumes({ MediaType.APPLICATION_JSON })
 		@Produces({ MediaType.APPLICATION_JSON })
-		public List<AssetTransaction> getTokenStackTrace(CheckToken token) throws Exception {
+		public List<AssetTransaction> getTokenStackTrace(OutsideMessage token) throws Exception {
 			List<AssetTransaction> response = fchainTracer.getTokenStackTrace(token.getName());
 			return response;
 		}
