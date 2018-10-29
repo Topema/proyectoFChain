@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.tfg2018.ws.rest.object.AddressBalance;
 import com.tfg2018.ws.rest.object.AddressValidator;
 import com.tfg2018.ws.rest.object.AssetTransaction;
 import com.tfg2018.ws.rest.object.KeyPairs;
@@ -38,7 +39,6 @@ public class GsontoObjectTranslator {
 	
 	public static List<AssetTransaction> getStackTrace(List<Object> assetTransactions) {
 		List<AssetTransaction> transactions = new ArrayList<AssetTransaction>();
-		int i =1;
 		if (assetTransactions != null) {
 			for (Object assetTransaction : assetTransactions) {
 				transactions.add(getTransaction(assetTransaction));
@@ -47,15 +47,23 @@ public class GsontoObjectTranslator {
 		return transactions;
 	}
 	
+	public static List<AddressBalance> getAddressBalances(List<Object> addressBalances) {
+		List<AddressBalance> balances = new ArrayList<AddressBalance>();
+		if(addressBalances != null) {
+			for(Object addressBalance :addressBalances) {
+				balances.add(getBalance(addressBalance));
+			}
+		}
+		return balances;
+	}
+	
 	public static String getOwner(List<Object> assetTransactions) {
 		List<AssetTransaction> transactions = new ArrayList<AssetTransaction>();
 		String result = "";
 		int i =1;
 		if (assetTransactions != null) {
 			for (Object assetTransaction : assetTransactions) {
-				if(i==assetTransactions.size())
 					result = formatTransactions(assetTransaction).getAddresses().keySet().toArray()[0].toString();
-				i++;
 			}
 		}
 		return result;
@@ -65,9 +73,6 @@ public class GsontoObjectTranslator {
 		String a = assetTransaction.toString();
 		Gson gson = new Gson();
 		AssetTransaction res = gson.fromJson(a, AssetTransaction.class);
-			if(res.getAddresses().size()==1) {
-				return null;
-			}
 		return res;
 	}
 	
@@ -75,6 +80,13 @@ public class GsontoObjectTranslator {
 		String a = assetTransaction.toString();
 		Gson gson = new Gson();
 		AssetTransaction res = gson.fromJson(a, AssetTransaction.class);
+		return res;
+	}
+	
+	private static AddressBalance getBalance(Object addressBalance) {
+		String a = addressBalance.toString();
+		Gson gson = new Gson();
+		AddressBalance res = gson.fromJson(a, AddressBalance.class);
 		return res;
 	}
 

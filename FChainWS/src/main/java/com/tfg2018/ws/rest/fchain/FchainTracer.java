@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.http.entity.StringEntity;
 
+import com.tfg2018.ws.rest.object.AddressBalance;
 import com.tfg2018.ws.rest.object.AssetTransaction;
 import com.tfg2018.ws.rest.utils.CommandTranslator;
 import com.tfg2018.ws.rest.utils.GsontoObjectTranslator;
@@ -14,11 +15,16 @@ public class FchainTracer {
 	private FchainInterface fChainQuerier = new FchainInterface(FchainConst.MULTICHAIN_SERVER_IP,
 			FchainConst.MULTICHAIN_SERVER_PORT, FchainConst.MULTICHAIN_SERVER_LOGIN, FchainConst.MULTICHAIN_SERVER_PWD);
 	
+	public List<AddressBalance> getAddressBalances(String address) throws Exception {
+		StringEntity request = CommandTranslator.commandToJson("getaddressbalances", address, 0);
+		Object object = this.fChainQuerier.executeRequest(request);
+		return GsontoObjectTranslator.getAddressBalances((ArrayList<Object>) object);	
+	}
+	
 	public String getTokenOwner(String tokenName) throws Exception {
 		StringEntity request = CommandTranslator.commandToJson("listassettransactions", tokenName);
-		String result;
 		Object object= this.fChainQuerier.executeRequest(request);
-		result = GsontoObjectTranslator.getOwner((ArrayList<Object>) object);
+		String result = GsontoObjectTranslator.getOwner((ArrayList<Object>) object);
 		return result;
 	}
 	

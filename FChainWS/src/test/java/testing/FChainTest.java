@@ -14,6 +14,7 @@ import org.junit.Test;
 import com.tfg2018.ws.rest.fchain.WalletManager;
 import com.tfg2018.ws.rest.object.KeyPairs;
 import com.tfg2018.ws.rest.object.Token;
+import com.tfg2018.ws.rest.ConsumedObjects.CheckToken;
 import com.tfg2018.ws.rest.fchain.FchainConst;
 import com.tfg2018.ws.rest.fchain.FchainInterface;
 import com.tfg2018.ws.rest.fchain.FchainTracer;
@@ -100,17 +101,30 @@ public class FChainTest {
 	}
 	
 	@Test
+	public void checkTokenOwner() {
+		FchainTracer fchainTracer = new FchainTracer();
+		try {
+			fchainTracer.getTokenOwner("Lo_que_tengo_entre_las_piernas");
+			assert(true);
+		} catch (Exception e) {
+			System.out.println(e);
+			assert(false);
+
+		}
+	}
+	/*
+	@Test
 	public void tokentracing() {
 		TokenManager tokenManager = new TokenManager();
 		WalletManager walletManager = new WalletManager();
+		FchainTracer fchainTracer = new FchainTracer();
 		try {
 			Token token = newToken();
 			KeyPairs keyPairSender3 = walletManager.getNewKeyPair();
 			transactToken(token, keyPairSender3);
-			FchainTracer fchainTracer = new FchainTracer();
 			System.out.println(keyPairSender3.getAddress());
+			TimeUnit.SECONDS.sleep(10);
 			System.out.println(fchainTracer.getTokenOwner(token.getName()));
-			TimeUnit.SECONDS.sleep(2);
 			if(keyPairSender3.getAddress().equals(fchainTracer.getTokenOwner(token.getName()))) {
 				assert(true);
 			}else {
@@ -119,6 +133,23 @@ public class FChainTest {
 		}catch(Exception e){
 			System.out.println(e);
 			assert(false);
+		}
+	}
+	*/
+	
+	@Test
+	public void getAddressBalance() {
+		FchainTracer a = new FchainTracer();
+		try {
+			if(!a.getAddressBalances("1DNEsT74krP7FKEDBENH56a4GSYSAVLaMuXZ5a").isEmpty()) {
+				assert(true);
+			}else {
+				assert(false);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			assert(false);
+			e.printStackTrace();
 		}
 	}
 	

@@ -7,17 +7,21 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.tfg2018.ws.rest.ConsumedObjects.CheckToken;
+import com.tfg2018.ws.rest.ConsumedObjects.CreateTokenStructure;
+import com.tfg2018.ws.rest.fchain.FchainTracer;
 import com.tfg2018.ws.rest.fchain.TokenManager;
 import com.tfg2018.ws.rest.fchain.WalletManager;
 import com.tfg2018.ws.rest.object.KeyPairs;
+import com.tfg2018.ws.rest.object.ResponseMessage;
 import com.tfg2018.ws.rest.object.Token;
-import com.tfg2018.ws.rest.object.TokenCreator;
 
 @Path("/Fchain")
 public class ServiceFchain {
 
 	private WalletManager walletManager = new WalletManager();
-	TokenManager tokenManager = new TokenManager();
+	private TokenManager tokenManager = new TokenManager();
+	private FchainTracer fchainTracer = new FchainTracer();
 	
 		@GET
 		@Path("/createKeyPair")
@@ -39,14 +43,30 @@ public class ServiceFchain {
 		}
 		
 		@POST
+		@Path("/getToken")
+		@Consumes({ MediaType.APPLICATION_JSON })
+		@Produces({ MediaType.APPLICATION_JSON })
+		public Token getTokenInfo(CheckToken token) throws Exception {
+			Token response = tokenManager.getToken(token.getName());
+			return response;
+		}
+		
+		@POST
 		@Path("/generateNewToken")
 		@Consumes({ MediaType.APPLICATION_JSON })
 		@Produces({ MediaType.APPLICATION_JSON })
-		public Token GenerateNewToken(TokenCreator tokenCreator) throws Exception {
-			Token token = new Token(null, null);
-			String address = "";
-			tokenManager.generateToken(token,address);
-			Token response = tokenManager.getToken(token.getName());
+		public Token GenerateNewToken(CreateTokenStructure tokenCreator) throws Exception {
+			tokenManager.generateToken(tokenCreator.getToken(),tokenCreator.getAddress());
+			Token response = tokenManager.getToken(tokenCreator.getTokenName());
+			return response;
+		}
+		
+		@POST
+		@Path("/getTokenOwner")
+		@Consumes({ MediaType.APPLICATION_JSON })
+		@Produces({ MediaType.APPLICATION_JSON })
+		public ResponseMessage getTokenOwner(CheckToken token) throws Exception {
+			ResponseMessage response = new ResponseMessage(fchainTracer.getTokenOwner(token.getName()));
 			return response;
 		}
 }

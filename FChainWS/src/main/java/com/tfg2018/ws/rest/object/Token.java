@@ -24,6 +24,10 @@ public class Token {
 		this.issueraw = 0;
 		this.details = details;
 	}
+	
+	public Token(String assetName) {
+		this.name = assetName;
+	}
 
 	public String getName() {
 		return name;
