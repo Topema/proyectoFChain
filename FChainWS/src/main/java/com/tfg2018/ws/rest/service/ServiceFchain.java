@@ -54,7 +54,7 @@ public class ServiceFchain {
 		@Consumes({ MediaType.APPLICATION_JSON })
 		@Produces({ MediaType.APPLICATION_JSON })
 		public Token getTokenInfo(OutsideMessage token) throws Exception {
-			Token response = tokenManager.getToken(token.getName());
+			Token response = tokenManager.getToken(token.getMessage());
 			return response;
 		}
 		
@@ -73,7 +73,7 @@ public class ServiceFchain {
 		@Consumes({ MediaType.APPLICATION_JSON })
 		@Produces({ MediaType.APPLICATION_JSON })
 		public ResponseMessage getTokenOwner(OutsideMessage token) throws Exception {
-			ResponseMessage response = new ResponseMessage(fchainTracer.getTokenOwner(token.getName()));
+			ResponseMessage response = new ResponseMessage(fchainTracer.getTokenOwner(token.getMessage()));
 			return response;
 		}
 		
@@ -82,7 +82,7 @@ public class ServiceFchain {
 		@Consumes({ MediaType.APPLICATION_JSON })
 		@Produces({ MediaType.APPLICATION_JSON })
 		public List<AssetTransaction> getTokenStackTrace(OutsideMessage token) throws Exception {
-			List<AssetTransaction> response = fchainTracer.getTokenStackTrace(token.getName());
+			List<AssetTransaction> response = fchainTracer.getTokenStackTrace(token.getMessage());
 			return response;
 		}
 		

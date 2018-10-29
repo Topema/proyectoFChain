@@ -7,7 +7,11 @@ public class OutsideMessage {
 	
 	private String message;
 
-	public String getName() {
+	public String getMessage() {
 		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 }
