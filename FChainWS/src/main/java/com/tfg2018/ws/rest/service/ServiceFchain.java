@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import com.tfg2018.ws.rest.ConsumedObjects.CheckToken;
 import com.tfg2018.ws.rest.ConsumedObjects.CreateTokenStructure;
 import com.tfg2018.ws.rest.ConsumedObjects.SendTokenCreator;
+import com.tfg2018.ws.rest.fchain.FchainConst;
 import com.tfg2018.ws.rest.fchain.FchainTracer;
 import com.tfg2018.ws.rest.fchain.TokenManager;
 import com.tfg2018.ws.rest.fchain.TransactionManager;
@@ -91,6 +92,16 @@ public class ServiceFchain {
 		@Produces({ MediaType.APPLICATION_JSON })
 		public ResponseMessage sendToken(SendTokenCreator transact) throws Exception {
 			String hexBlob = transactionManager.createAndSignRawTransaction(transact.getAddressSender(), transact.getPrivKey(), transact.getAddressReceiver(), transact.getTokenName());
+			ResponseMessage response = new ResponseMessage(transactionManager.sendConfirmedTransaction(hexBlob));
+			return response;
+		}
+		
+		@POST
+		@Path("/burnToken")
+		@Consumes({ MediaType.APPLICATION_JSON })
+		@Produces({ MediaType.APPLICATION_JSON })
+		public ResponseMessage burnToken(SendTokenCreator transact) throws Exception {
+			String hexBlob = transactionManager.createAndSignRawTransaction(transact.getAddressSender(), transact.getPrivKey(), FchainConst.BURN_ADDRESS, transact.getTokenName());
 			ResponseMessage response = new ResponseMessage(transactionManager.sendConfirmedTransaction(hexBlob));
 			return response;
 		}
