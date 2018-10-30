@@ -17,6 +17,7 @@ import com.tfg2018.ws.rest.fchain.FchainTracer;
 import com.tfg2018.ws.rest.fchain.TokenManager;
 import com.tfg2018.ws.rest.fchain.TransactionManager;
 import com.tfg2018.ws.rest.fchain.WalletManager;
+import com.tfg2018.ws.rest.object.AddressBalance;
 import com.tfg2018.ws.rest.object.AssetTransaction;
 import com.tfg2018.ws.rest.object.KeyPairs;
 import com.tfg2018.ws.rest.object.ResponseMessage;
@@ -29,6 +30,7 @@ public class ServiceFchain {
 	private TokenManager tokenManager = new TokenManager();
 	private FchainTracer fchainTracer = new FchainTracer();
 	private TransactionManager transactionManager = new TransactionManager();
+	private OutsideMessage response = new OutsideMessage();
 	
 		@GET
 		@Path("/createKeyPair")
@@ -72,8 +74,8 @@ public class ServiceFchain {
 		@Path("/getTokenOwner")
 		@Consumes({ MediaType.APPLICATION_JSON })
 		@Produces({ MediaType.APPLICATION_JSON })
-		public ResponseMessage getTokenOwner(OutsideMessage token) throws Exception {
-			ResponseMessage response = new ResponseMessage(fchainTracer.getTokenOwner(token.getMessage()));
+		public OutsideMessage getTokenOwner(OutsideMessage token) throws Exception {
+			this.response.setMessage(fchainTracer.getTokenOwner(token.getMessage()));
 			return response;
 		}
 		
@@ -87,12 +89,21 @@ public class ServiceFchain {
 		}
 		
 		@POST
+		@Path("/getAddressBalance")
+		@Consumes({ MediaType.APPLICATION_JSON })
+		@Produces({ MediaType.APPLICATION_JSON })
+		public List<AddressBalance> getAddressBalance(OutsideMessage address) throws Exception {
+			List<AddressBalance> response = fchainTracer.getAddressBalances(address.getMessage());
+			return response;
+		}
+		
+		@POST
 		@Path("/createInstantTransaction")
 		@Consumes({ MediaType.APPLICATION_JSON })
 		@Produces({ MediaType.APPLICATION_JSON })
-		public ResponseMessage sendToken(SendTokenCreator transact) throws Exception {
+		public OutsideMessage sendToken(SendTokenCreator transact) throws Exception {
 			String hexBlob = transactionManager.createAndSignRawTransaction(transact.getAddressSender(), transact.getPrivKey(), transact.getAddressReceiver(), transact.getTokenName());
-			ResponseMessage response = new ResponseMessage(transactionManager.sendConfirmedTransaction(hexBlob));
+			this.response.setMessage(transactionManager.sendConfirmedTransaction(hexBlob));
 			return response;
 		}
 		
@@ -100,9 +111,9 @@ public class ServiceFchain {
 		@Path("/burnToken")
 		@Consumes({ MediaType.APPLICATION_JSON })
 		@Produces({ MediaType.APPLICATION_JSON })
-		public ResponseMessage burnToken(SendTokenCreator transact) throws Exception {
+		public OutsideMessage burnToken(SendTokenCreator transact) throws Exception {
 			String hexBlob = transactionManager.createAndSignRawTransaction(transact.getAddressSender(), transact.getPrivKey(), FchainConst.BURN_ADDRESS, transact.getTokenName());
-			ResponseMessage response = new ResponseMessage(transactionManager.sendConfirmedTransaction(hexBlob));
+			this.response.setMessage(transactionManager.sendConfirmedTransaction(hexBlob));
 			return response;
 		}
 }

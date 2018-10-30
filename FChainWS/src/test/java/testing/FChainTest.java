@@ -112,7 +112,7 @@ public class FChainTest {
 
 		}
 	}
-	/*
+	
 	@Test
 	public void tokentracing() {
 		TokenManager tokenManager = new TokenManager();
@@ -135,7 +135,7 @@ public class FChainTest {
 			assert(false);
 		}
 	}
-	*/
+	
 	
 	@Test
 	public void getAddressBalance() {

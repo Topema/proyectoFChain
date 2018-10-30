@@ -1,13 +1,13 @@
 package com.tfg2018.ws.rest.object;
 
 public class ResponseMessage {
-	private String name;
+	private String message;
 	
 	public ResponseMessage(String name) {
-		this.name = name;
+		this.message = name;
 	}
 
 	public String getName() {
-		return name;
+		return message;
 	}
 }
