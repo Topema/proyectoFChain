@@ -3,26 +3,24 @@ package testing;
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
 
 import com.tfg2018.ws.rest.fchain.WalletManager;
+import com.tfg2018.ws.rest.object.AddressBalance;
 import com.tfg2018.ws.rest.object.KeyPairs;
 import com.tfg2018.ws.rest.object.Token;
-import com.tfg2018.ws.rest.ConsumedObjects.OutsideMessage;
-import com.tfg2018.ws.rest.fchain.FchainConst;
-import com.tfg2018.ws.rest.fchain.FchainInterface;
 import com.tfg2018.ws.rest.fchain.FchainTracer;
 import com.tfg2018.ws.rest.fchain.TokenManager;
 import com.tfg2018.ws.rest.fchain.TransactionManager;
-import com.tfg2018.ws.rest.utils.CommandTranslator;
 
 public class FChainTest {
+
 
 	@Test
 	public void setAddressTest() {
@@ -35,17 +33,6 @@ public class FChainTest {
 			assert(false);
 		}
 	}
-	/*@Test
-	public void setNewAddressTest() {
-		AddressManager test = new AddressManager();
-		try {
-			//test.generateNewMultisigAddress("0270e6c1ae859c24d04282cbbe4a3f2f4bcdd1a022f71c3d636bb8785e3741090b");
-			assert(true);
-		}catch(Exception e) {
-			System.out.print(e);
-			assert(false);
-		}
-	}*/
 	
 	@Test
 	public void issueToken() {
@@ -104,7 +91,8 @@ public class FChainTest {
 	public void checkTokenOwner() {
 		FchainTracer fchainTracer = new FchainTracer();
 		try {
-			fchainTracer.getTokenOwner("Lo_que_tengo_entre_las_piernas");
+			fchainTracer.getTokenOwner("nenene");
+			System.out.println(fchainTracer.getTokenCreator("nenene"));
 			assert(true);
 		} catch (Exception e) {
 			System.out.println(e);
@@ -141,7 +129,8 @@ public class FChainTest {
 	public void getAddressBalance() {
 		FchainTracer a = new FchainTracer();
 		try {
-			if(!a.getAddressBalances("1DNEsT74krP7FKEDBENH56a4GSYSAVLaMuXZ5a").isEmpty()) {
+			List<AddressBalance> response = a.getAddressBalances("1Xn54dYgPn7cm8syaURY43ukersA4tPdboBPaV");
+			if(!a.getAddressBalances("1Xn54dYgPn7cm8syaURY43ukersA4tPdboBPaV").isEmpty()) {
 				assert(true);
 			}else {
 				assert(false);

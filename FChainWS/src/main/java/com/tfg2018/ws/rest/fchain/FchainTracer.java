@@ -16,7 +16,7 @@ public class FchainTracer {
 			FchainConst.MULTICHAIN_SERVER_PORT, FchainConst.MULTICHAIN_SERVER_LOGIN, FchainConst.MULTICHAIN_SERVER_PWD);
 	
 	public List<AddressBalance> getAddressBalances(String address) throws Exception {
-		StringEntity request = CommandTranslator.commandToJson("getaddressbalances", address, 0);
+		StringEntity request = CommandTranslator.commandToJson("getaddressbalances", address);
 		Object object = this.fChainQuerier.executeRequest(request);
 		return GsontoObjectTranslator.getAddressBalances((ArrayList<Object>) object);	
 	}
@@ -25,6 +25,27 @@ public class FchainTracer {
 		StringEntity request = CommandTranslator.commandToJson("listassettransactions", tokenName);
 		Object object= this.fChainQuerier.executeRequest(request);
 		String result = GsontoObjectTranslator.getOwner((ArrayList<Object>) object);
+		return result;
+	}
+	
+	public String getLastTokenOwner(String tokenName) throws Exception {
+		StringEntity request = CommandTranslator.commandToJson("listassettransactions", tokenName);
+		Object object= this.fChainQuerier.executeRequest(request);
+		String result = GsontoObjectTranslator.getLastOwner((ArrayList<Object>) object);
+		return result;
+	}
+	
+	public String getTokenInitialOwner(String tokenName) throws Exception {
+		StringEntity request = CommandTranslator.commandToJson("listassettransactions", tokenName);
+		Object object= this.fChainQuerier.executeRequest(request);
+		String result = GsontoObjectTranslator.getInitialOwner((ArrayList<Object>) object);
+		return result;
+	}
+	
+	public String getTokenCreator(String tokenName) throws Exception {
+		StringEntity request = CommandTranslator.commandToJson("listassettransactions", tokenName);
+		Object object= this.fChainQuerier.executeRequest(request);
+		String result = GsontoObjectTranslator.getCreator((ArrayList<Object>) object);
 		return result;
 	}
 	

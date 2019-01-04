@@ -7,8 +7,6 @@ import java.util.Map;
 
 import org.apache.http.entity.StringEntity;
 
-import com.tfg2018.ws.rest.object.KeyPairs;
-import com.tfg2018.ws.rest.object.Token;
 import com.tfg2018.ws.rest.utils.CommandTranslator;
 import com.tfg2018.ws.rest.utils.GsontoObjectTranslator;
 

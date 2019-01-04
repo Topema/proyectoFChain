@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.tfg2018.ws.rest.fchain.FchainConst;
 import com.tfg2018.ws.rest.object.AddressBalance;
 import com.tfg2018.ws.rest.object.AddressValidator;
 import com.tfg2018.ws.rest.object.AssetTransaction;
@@ -48,6 +49,7 @@ public class GsontoObjectTranslator {
 	}
 	
 	public static List<AddressBalance> getAddressBalances(List<Object> addressBalances) {
+		System.out.println(addressBalances);
 		List<AddressBalance> balances = new ArrayList<AddressBalance>();
 		if(addressBalances != null) {
 			for(Object addressBalance :addressBalances) {
@@ -58,12 +60,54 @@ public class GsontoObjectTranslator {
 	}
 	
 	public static String getOwner(List<Object> assetTransactions) {
-		List<AssetTransaction> transactions = new ArrayList<AssetTransaction>();
 		String result = "";
-		int i =1;
+		if (assetTransactions != null) {
+			int i = 1;
+			for (Object assetTransaction : assetTransactions) {
+				if(i==0) {
+					try {
+						result = formatTransactions(assetTransaction).getAddresses().keySet().toArray()[1].toString();
+					}catch (Exception e){}
+				} else {
+					result = formatTransactions(assetTransaction).getAddresses().keySet().toArray()[0].toString();
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static String getLastOwner(List<Object> assetTransactions) {
+		String address = "";
 		if (assetTransactions != null) {
 			for (Object assetTransaction : assetTransactions) {
-					result = formatTransactions(assetTransaction).getAddresses().keySet().toArray()[0].toString();
+				address = formatTransactions(assetTransaction).getAddresses().keySet().toArray()[0].toString();
+				if(address.equals(FchainConst.BURN_ADDRESS)) {
+					return formatTransactions(assetTransaction).getAddresses().keySet().toArray()[1].toString();
+				}
+			}
+		}
+		return address;
+	}
+	
+	public static String getInitialOwner(List<Object> assetTransactions) {
+		if (assetTransactions != null) {
+			int i = 0;
+			for (Object assetTransaction : assetTransactions) {
+				if(i == 1) {
+					return formatTransactions(assetTransaction).getAddresses().keySet().toArray()[0].toString();
+				} else {
+					i++;
+				}
+			}
+		}
+		return "";
+	}
+	
+	public static String getCreator(List<Object> assetTransactions) {
+		String result = "";
+		if (assetTransactions != null) {
+			for (Object assetTransaction : assetTransactions) {
+					return formatTransactions(assetTransaction).getAddresses().keySet().toArray()[0].toString();
 			}
 		}
 		return result;

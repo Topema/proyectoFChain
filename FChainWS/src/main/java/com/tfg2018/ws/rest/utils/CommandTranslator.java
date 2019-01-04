@@ -28,7 +28,6 @@ public class CommandTranslator {
 			System.out.println("Error traduciendo elcomando a json");
 			throw new Exception(e);
 		}
-
 	}
 
 	private static Map<String, Object> getJsonMap(String command, Object... parameters) {

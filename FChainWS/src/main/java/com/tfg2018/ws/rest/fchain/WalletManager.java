@@ -2,7 +2,6 @@ package com.tfg2018.ws.rest.fchain;
 
 import org.apache.http.entity.StringEntity;
 
-import com.google.gson.Gson;
 import com.tfg2018.ws.rest.object.AddressValidator;
 import com.tfg2018.ws.rest.object.KeyPairs;
 import com.tfg2018.ws.rest.utils.CommandTranslator;
@@ -10,51 +9,23 @@ import com.tfg2018.ws.rest.utils.GsontoObjectTranslator;
 
 public class WalletManager {
 
-	private String walletAddress;
-	private KeyPairs nonWalletKeys;
-	private String multisignatureAddress;
 	private FchainInterface fChainQuerier = new FchainInterface(FchainConst.MULTICHAIN_SERVER_IP,
 			FchainConst.MULTICHAIN_SERVER_PORT, FchainConst.MULTICHAIN_SERVER_LOGIN, FchainConst.MULTICHAIN_SERVER_PWD);
 
-	public void generateMultisigAddress() throws Exception {
-		this.walletAddress = getNewAddress();
-		this.nonWalletKeys = getNewKeyPair();
-		this.multisignatureAddress = addMultisigAddress().toString();
-	}
-
-	public KeyPairs getNonWalletKeys() {
-		return this.nonWalletKeys;
-	}
-
-	public void generateNewMultisigAddress(String pubKey, String privKey) throws Exception {
-		this.multisignatureAddress = addMultisigAddress(pubKey, privKey).toString();
-	}
-
-	private Object addMultisigAddress() throws Exception {
+	public void grantPermission(String address) throws Exception {
 		try {
-			String[] keys = { this.walletAddress, this.nonWalletKeys.getPubkey() };
-			return this.fChainQuerier.executeRequest(CommandTranslator.commandToJson("addmultisigaddress", 1, keys));
+			this.fChainQuerier.executeRequest(CommandTranslator.commandToJson("grantfrom", FchainConst.ADMIN_ADDRESS , address, "issue,send,receive"));
 		} catch (Exception e) {
-			throw new Exception("Fallo al generar el par de claves");
-		}
-	}
-
-	private Object addMultisigAddress(String pubKey, String privKey) throws Exception {
-		validateAddress(privKey);
-		this.walletAddress = getNewAddress();
-		try {
-			String[] keys = { this.walletAddress, pubKey };
-			return this.fChainQuerier.executeRequest(CommandTranslator.commandToJson("addmultisigaddress", 1, keys));
-		} catch (Exception e) {
-			throw new Exception("Fallo al generar el par de claves");
+			throw new Exception("Fallo al otorgar permisos");
 		}
 	}
 
 	public String getNewAddress() throws Exception {
 		try {
-			return this.fChainQuerier.executeRequest(CommandTranslator.commandToJson("getnewaddress")).toString();
+			StringEntity request = CommandTranslator.commandToJson("getnewaddress");
+			return this.fChainQuerier.executeRequest(request).toString();
 		} catch (Exception e) {
-			throw new Exception("Error al generar la wallet");
+			throw new Exception("Wallet generation error");
 		}
 	}
 
@@ -67,7 +38,7 @@ public class WalletManager {
 			importAddress(response.getAddress());
 			return response;
 		} catch (Exception e) {
-			throw new Exception("Error al generar el par de claves");
+			throw new Exception("Key Pair generation error");
 		}
 	}
 
